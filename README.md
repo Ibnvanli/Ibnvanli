@@ -1,42 +1,39 @@
 # Ibnvanli
 
-在做一件有点不讨巧的事：**把绘画工具的性能抢回来**。
+独立开发者，关注工具类软件与图形性能。
 
-## AchiPaint
+## 项目
 
-> 轻核心 · 边缘插件 —— 一个性能优先的轻量绘画工具
+### AchiPaint
 
-一个跑在 Chromium 里的绘画软件。纯原生 ES module + Canvas 2D，没有框架，没有构建步骤。
+轻量绘画工具，运行于 Chromium。
 
-笔刷不自己写，直接接 [hokusai](https://github.com/reearth/hokusai)（libmypaint 的 Rust 移植）编译成的 WASM，
-所以压感、倾斜、速率响应都是 libmypaint 原本的数学。
+- **技术栈** — 原生 ES module + Canvas 2D，无框架、无构建步骤、运行时零依赖
+- **笔刷引擎** — [hokusai](https://github.com/reearth/hokusai)（libmypaint 的 Rust 移植），编译为 WebAssembly
+- **文件格式** — 自研 `.achi` 容器，magic + JSON 头 + 数据块 + CRC32，三层校验
+- **状态** — `v0.1.0-alpha.1`，功能可用，稳定性仍在迭代
+- **协议** — MIT
 
-**现在状态**：`v0.1.0-alpha.1`，能用，但别拿它干正事。缺的东西不少，随机崩也时有发生。
+[仓库](https://github.com/Ibnvanli/achipaint) · [性能规划](https://github.com/Ibnvanli/achipaint/blob/main/PERFORMANCE.md)
 
-→ [github.com/Ibnvanli/achipaint](https://github.com/Ibnvanli/achipaint)
+## 设计原则
 
-### 为什么做这个
+**轻核心，边缘插件。** 核心只保留画布、笔刷、图层、颜色四项，其余能力一律以插件形式接入。核心越小，越不容易在迭代中失控。
 
-主流绘画软件都在往订阅制走，而且一个比一个重。
-Krita 免费但卡，Clip Studio 好用但订阅，Procreate 便宜但锁在 iPad 上。
+**性能是首要指标。** 功能可以慢慢补，但输入延迟一旦超过阈值，工具就失去意义。当前以「大笔刷笔画的输入到上屏耗时」作为第一验收项。
 
-想要的是一个：**买断、轻、快、跨平台**的东西。
+**买断制。** 不做订阅。
 
-### 技术判断
+## 技术方向
 
-- **押 Chromium，不押 WebKit** —— 内核攥在自己手里比什么都强，Apple 砍项目的历史太多
-- **性能是唯一的护城河** —— 功能上追 Krita 要几年，性能上超过它只要几个版本
-- **不做订阅** —— 目标用户就是讨厌订阅的人和嫌 Krita 太卡的人
+渲染与合成基于 Chromium（Electron），而非 WebKit —— 渲染内核的可控性优先于平台原生性。
 
-[性能规划](https://github.com/Ibnvanli/achipaint/blob/main/PERFORMANCE.md) 里写了完整路线：
-把笔刷计算挪进 Web Worker、合成换 WebGL、笔刷 LOD，
-目标是 300px 笔刷单笔从 92ms 压到 16ms 以内。
+性能路线分为四个阶段：笔刷计算迁移至 Web Worker、合成迁移至 WebGL2、笔刷 LOD 与输入预测、大画布分块。目标与验收标准写在 [PERFORMANCE.md](https://github.com/Ibnvanli/achipaint/blob/main/PERFORMANCE.md) 中。
 
-## 最近在弄
+## 其他
 
-- AchiPaint 的 alpha 迭代
-- 本地 TTS（GPT-SoVITS）做配音
+本地语音合成（GPT-SoVITS）相关工具与实验。
 
-## 找我可以聊
+## 联系
 
-性能优化、Web 图形、绘画工具的产品判断。开 issue 就行。
+技术讨论与问题反馈请开 [Issue](https://github.com/Ibnvanli/achipaint/issues)。

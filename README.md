@@ -8,10 +8,11 @@
 
 轻量绘画工具，运行于 Chromium。
 
-- **技术栈** — 原生 ES module + Canvas 2D，无框架、无构建步骤、运行时零依赖
+- **技术栈** — 原生 ES module + Canvas 2D，无框架、无构建步骤、运行时无 `node_modules` 依赖
 - **笔刷引擎** — [hokusai](https://github.com/reearth/hokusai)（libmypaint 的 Rust 移植），编译为 WebAssembly
-- **文件格式** — 自研 `.achi` 容器，magic + JSON 头 + 数据块 + CRC32，三层校验
-- **状态** — `v0.1.0-alpha.1`，功能可用，稳定性仍在迭代
+- **文件格式** — 自研 `.achi` v2 容器：按 256×256 瓦片存储，只写有笔迹的块，含 CRC32 三层校验
+- **测试** — 66 项，跑在真实 Chromium 里，断言合成层像素与 DOM 行为
+- **状态** — `v0.1.0-alpha.1`，核心绘画能力已完整，稳定性仍在迭代
 - **协议** — MIT
 
 [仓库](https://github.com/Ibnvanli/achipaint) · [性能规划](https://github.com/Ibnvanli/achipaint/blob/main/PERFORMANCE.md)
@@ -32,7 +33,8 @@
 
 ## 其他
 
-本地语音合成（GPT-SoVITS）相关工具与实验。
+**[dsh-gsv-bridge](https://github.com/Ibnvanli/dsh-gsv-bridge)** — DeepSeek Harness 与本机 GPT-SoVITS 之间的桥接插件。
+自动识别 `api.py` / `api_v2.py` 两套 API 方言，把合成结果落盘并接回界面朗读。MIT。
 
 ## 联系
 
